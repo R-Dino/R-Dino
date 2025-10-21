@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>TecnoVida — Formulário de Anamnese</title>
+  <style>
+    :root{
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      color:#222;
+      --accent:#0b74da;
+      --bg:#f7f9fc;
+      --card:#fff;
+      --muted:#667;
+    }
+    body{
+      margin:0;
+      padding:2rem;
+      background:linear-gradient(180deg,var(--bg),#eef5ff 60%);
+      display:flex;
+      justify-content:center;
+    }
+    .container{
+      width:100%;
+      max-width:900px;
+      background:var(--card);
+      border-radius:12px;
+      box-shadow:0 8px 30px rgba(20,30,60,0.08);
+      padding:1.25rem 1.5rem;
+    }
+    h1{ margin:0 0 0.5rem 0; font-size:1.4rem; }
+    p.lead{ margin:0 0 1rem 0; color:var(--muted); font-size:0.95rem; }
+    fieldset{
+      border:1px solid #e2e8f0;
+      padding:1rem;
+      border-radius:8px;
+      margin-bottom:1rem;
+      background:linear-gradient(180deg, rgba(255,255,255,0.6), rgba(250,252,255,0.6));
+    }
+    legend{ font-weight:600; padding:0 0.5rem; }
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+      gap:0.75rem;
+      margin-top:0.5rem;
+    }
+    label{ display:block; font-size:0.85rem; margin-bottom:0.35rem; }
+    input[type="text"], input[type="email"], input[type="number"], input[type="date"], select, textarea {
+      width:100%;
+      padding:0.55rem 0.6rem;
+      border:1px solid #d6e0ef;
+      border-radius:6px;
+      font-size:0.95rem;
+      box-sizing:border-box;
+      background:white;
+    }
+    textarea{ min-height:84px; resize:vertical; }
+    .small{ font-size:0.82rem; color:var(--muted); margin-top:0.25rem; }
+    .row-inline{ display:flex; gap:1rem; align-items:center; flex-wrap:wrap; }
+    .radio-group, .checkbox-group{ display:flex; gap:1rem; align-items:center; flex-wrap:wrap; }
+    .actions{ display:flex; justify-content:flex-end; gap:0.5rem; margin-top:0.5rem; }
+    button, input[type="submit"]{
+      background:var(--accent);
+      color:white;
+      border:none;
+      padding:0.6rem 0.9rem;
+      border-radius:8px;
+      font-weight:600;
+      cursor:pointer;
+    }
+    button.secondary{
+      background:transparent;
+      color:var(--accent);
+      border:1px solid #cfe3fb;
+    }
+    .note{ font-size:0.82rem; color:#a33; margin-top:0.25rem; }
+    @media (max-width:520px){
+      .grid{ grid-template-columns: 1fr; }
+      .actions{ justify-content:stretch; }
+    }
+  </style>
+</head>
+<body>
+  <main class="container" role="main">
+    <h1>TecnoVida — Formulário de Anamnese</h1>
+    <p class="lead">Preencha os dados para cadastro inicial. Campos com <span aria-hidden="true">*</span> são obrigatórios.</p>
+
+    <form id="anamneseForm" action="#" method="post" autocomplete="on" novalidate>
+      <!-- === Seção 1: Dados Pessoais (5 campos) === -->
+      <fieldset>
+        <legend>Seção 1 — Dados Pessoais</legend>
+        <div class="grid">
+          <!-- 1) Nome Completo -->
+          <div>
+            <label for="nome">Nome completo <span aria-hidden="true">*</span></label>
+            <input id="nome" name="nome" type="text" required placeholder="Ex.: Maria da Silva" />
+          </div>
+
+          <!-- 2) Data de Nascimento -->
+          <div>
+            <label for="nascimento">Data de nascimento <span aria-hidden="true">*</span></label>
+            <input id="nascimento" name="nascimento" type="date" required />
+            <div class="small">Informe a data no formato dd/mm/aaaa.</div>
+          </div>
+
+          <!-- 3) Gênero (usando select para variar tipos) -->
+          <div>
+            <label for="genero">Gênero <span aria-hidden="true">*</span></label>
+            <select id="genero" name="genero" required>
+              <option value="">— Selecione —</option>
+              <option value="feminino">Feminino</option>
+              <option value="masculino">Masculino</option>
+              <option value="nao-binario">Não-binário</option>
+              <option value="prefiro-nao-dizer">Prefiro não dizer</option>
+              <option value="outro">Outro</option>
+            </select>
+          </div>
+
+          <!-- 4) CPF (type=number conforme solicitado; aviso sobre pattern na UI) -->
+          <div>
+            <label for="cpf">CPF (somente dígitos) <span aria-hidden="true">*</span></label>
+            <input id="cpf" name="cpf" type="number" inputmode="numeric" required placeholder="Apenas números, ex: 12345678909" min="0" step="1" />
+            <div class="small">Observação: foi usado <code>type="number"</code> para aceitar apenas dígitos. Em produção recomenda-se validar com pattern/expressão regular e permitir zeros à esquerda.</div>
+          </div>
+
+          <!-- 5) E-mail -->
+          <div>
+            <label for="email">E-mail <span aria-hidden="true">*</span></label>
+            <input id="email" name="email" type="email" required placeholder="seunome@exemplo.com" />
+          </div>
+        </div>
+      </fieldset>
+
+      <!-- === Seção 2: Histórico de Saúde (5 campos) === -->
+      <fieldset>
+        <legend>Seção 2 — Histórico de Saúde</legend>
+        <div class="grid">
+          <!-- 6) Possui doença crônica? (radio Sim/Não) -->
+          <div>
+            <label>Possui alguma doença crônica? <span aria-hidden="true">*</span></label>
+            <div class="radio-group" role="radiogroup" aria-labelledby="doencaLabel">
+              <label><input type="radio" name="doenca_cronica" value="sim" required /> Sim</label>
+              <label><input type="radio" name="doenca_cronica" value="nao" /> Não</label>
+            </div>
+            <div id="doenca-detalhe-container" style="display:none; margin-top:0.5rem;">
+              <label for="doenca-detalhe">Se sim, descreva:</label>
+              <textarea id="doenca-detalhe" name="doenca_detalhe" placeholder="Ex.: Diabetes tipo 2, hipertensão..."></textarea>
+            </div>
+          </div>
+
+          <!-- 7) Quais medicamentos utiliza regularmente? (textarea) -->
+          <div style="grid-column: 1 / -1;">
+            <label for="medicamentos">Quais medicamentos você utiliza regularmente?</label>
+            <textarea id="medicamentos" name="medicamentos" placeholder="Liste medicamentos e dosagens, se souber."></textarea>
+          </div>
+
+          <!-- 8) Você fuma? (checkbox para "Sim") -->
+          <div>
+            <label>Você fuma?</label>
+            <div class="checkbox-group">
+              <label><input type="checkbox" id="fuma" name="fuma" /> Sim — atualmente fumo</label>
+            </div>
+          </div>
+
+          <!-- 9) Altura (cm) -->
+          <div>
+            <label for="altura">Altura (cm)</label>
+            <input id="altura" name="altura_cm" type="number" placeholder="Ex.: 170" min="30" max="300" step="1" />
+            <div class="small">Insira em centímetros (valores típicos: 50–250).</div>
+          </div>
+
+          <!-- 10) Peso (kg) -->
+          <div>
+            <label for="peso">Peso (kg)</label>
+            <input id="peso" name="peso_kg" type="number" placeholder="Ex.: 72.5" min="1" max="500" step="0.1" />
+          </div>
+        </div>
+      </fieldset>
+
+      <!-- === Seção 3: Detalhes da Consulta (5 campos) === -->
+      <fieldset>
+        <legend>Seção 3 — Detalhes da Consulta</legend>
+        <div class="grid">
+          <!-- 11) Principal motivo da consulta (input text longo) -->
+          <div style="grid-column: 1 / -1;">
+            <label for="motivo">Qual é o principal motivo da sua consulta? <span aria-hidden="true">*</span></label>
+            <input id="motivo" name="motivo" type="text" required placeholder="Descreva brevemente o motivo" />
+            <div class="small">Se for algo complexo, descreva o sintoma principal e há quanto tempo ocorre.</div>
+          </div>
+
+          <!-- 12) Frequência de exercícios (select) -->
+          <div>
+            <label for="exercicio">Com que frequência você pratica exercícios físicos?</label>
+            <select id="exercicio" name="frequencia_exercicio">
+              <option value="">— Selecione —</option>
+              <option value="diariamente">Diariamente</option>
+              <option value="semanalmente">Semanalmente</option>
+              <option value="raramente">Raramente</option>
+              <option value="nunca">Nunca</option>
+            </select>
+          </div>
+
+          <!-- 13) Data da última consulta -->
+          <div>
+            <label for="ultima_consulta">Data da última consulta (aprox.)</label>
+            <input id="ultima_consulta" name="ultima_consulta" type="date" />
+            <div class="small">Se não lembra a data exata, informe mês/ano aproximado.</div>
+          </div>
+
+          <!-- 14) Prefere ser contatado por (radio Telefone / E-mail) -->
+          <div>
+            <label>Prefere ser contatado por? <span aria-hidden="true">*</span></label>
+            <div class="radio-group" role="radiogroup" aria-label="Contato preferido">
+              <label><input type="radio" name="contato_pref" value="telefone" required /> Telefone</label>
+              <label><input type="radio" name="contato_pref" value="email" /> E-mail</label>
+            </div>
+          </div>
+
+          <!-- 15) Botão de envio -->
+          <div style="grid-column: 1 / -1;" class="actions" aria-hidden="false">
+            <button type="reset" class="secondary">Limpar</button>
+            <input type="submit" value="Enviar Anamnese" />
+          </div>
+        </div>
+      </fieldset>
+    </form>
+    <p class="small" style="margin-top:0.5rem;">Dados serão usados apenas para fins de atendimento e cadastro clínico. Obrigado por colaborar com a TecnoVida.</p>
+  </main>
+
+  <script>
+    // Ajustes de usabilidade:
+    (function(){
+      // 1) definir max para datas (não permitir dias futuros)
+      const hoje = new Date().toISOString().split('T')[0];
+      document.getElementById('nascimento').setAttribute('max', hoje);
+      document.getElementById('ultima_consulta').setAttribute('max', hoje);
+
+      // 2) mostrar campo de detalhe quando responder "Sim" para doença crônica
+      const radiosDoenca = document.getElementsByName('doenca_cronica');
+      const detalheContainer = document.getElementById('doenca-detalhe-container');
+      radiosDoenca.forEach(r => r.addEventListener('change', function(){
+        if (this.value === 'sim') detalheContainer.style.display = 'block';
+        else {
+          // esconde e limpa
+          detalheContainer.style.display = 'none';
+          document.getElementById('doenca-detalhe').value = '';
+        }
+      }));
+
+      // 3) limitar CPF a 11 dígitos visualmente (type=number não respeita maxlength)
+      const cpfInput = document.getElementById('cpf');
+      cpfInput.addEventListener('input', function(e){
+        // remove espaços e pontos caso sejam digitados via copiar/colar
+        let v = this.value.replace(/\D/g,'');
+        if (v.length > 11) v = v.slice(0,11);
+        this.value = v;
+      });
+
+      // 4) validação simples ao submeter (mensagens acessíveis)
+      const form = document.getElementById('anamneseForm');
+      form.addEventListener('submit', function(ev){
+        // Exemplo: garantir que, se 'Sim' para doença, o campo detalhe pode ser vazio (opcional),
+        // mas aqui deixamos o navegador mostrar validações nativas.
+        // Previna envio para demonstrar validação (remova em integração real).
+        ev.preventDefault();
+        // Checagem básica de campos requeridos:
+        if (!form.reportValidity()) {
+          // browser will show native messages
+          return;
+        }
+        // Em ambiente real, aqui você enviaria via fetch/ajax ou deixaria o form enviar
+        alert('Formulário validado localmente. Em um sistema real, os dados seriam enviados ao servidor.');
+      });
+    })();
+  </script>
+</body>
+</html>
